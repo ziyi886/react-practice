@@ -1,6 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import { List, Card } from 'antd';
+import { List } from 'antd';
+import { AlbumItem } from '../components/AlbumItem';
+import styled from 'styled-components';
+
+const ListWrapper = styled.div`
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+`;
+
+const MainHeader = styled.div`
+    position: relative;
+    left: 2%;
+    font-size: 25px;
+`;
+
+const SecondHeader = styled.div`
+    position: relative;
+    left: 2%;
+    font-size: 20px;
+    color: #67738a;
+`;
 
 export const ArtistDetails = () => {
     const [albums, setAlbums] = useState<any>([]);
@@ -23,13 +45,27 @@ export const ArtistDetails = () => {
     },[])
 
     return (
-        <div>
-            artists details
-            {
-                albums.map((album: any) =>(
-                    <div>{album.name}</div>
-                ))
-            }
-        </div>
+        <>
+            <MainHeader>Tom Petty</MainHeader>
+            <SecondHeader>Albums</SecondHeader>
+            <ListWrapper>
+                <List
+                    grid={{ gutter: 16, column: 4 }}
+                    dataSource={albums}
+                    renderItem={(item: any) => (
+                    <List.Item>
+                        <AlbumItem 
+                            name={item.name}
+                            img={item.images[0].url}
+                            artists={item.artists.map((artist:any) => artist.name)}
+                            date={item.release_date}
+                            track={item.total_tracks}
+                            link={item.external_urls.spotify}
+                        />
+                    </List.Item>
+                    )}
+                />
+            </ListWrapper>
+        </>
     )
 }
