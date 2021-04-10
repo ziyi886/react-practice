@@ -1,7 +1,7 @@
 import * as React from "react";
 
 const Styles = {
-	fill: "grey",
+	fill: "#CCCCCC",
 };
 
 export const SearchIcon = () => (

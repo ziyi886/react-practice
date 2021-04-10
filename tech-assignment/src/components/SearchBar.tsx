@@ -8,11 +8,7 @@ interface SearchBarProps{
 
 const SearchWrapper = styled.div`
     height: 60px;
-    margin: auto;
-    display: block;
-    position: relative;
-    top: 300px;
-    width: 40%; 
+    
 `;
 
 const StyledInput = styled.input`
@@ -22,16 +18,16 @@ const StyledInput = styled.input`
     font-size: 25px;
     text-align: center;
     border-radius: 10px;
-    border: 0.5px solid grey;
+    border: 0.5px solid #969696;
     padding-top: 12px;
     padding-bottom: 12px;
 `;
 
 const IconWrapper = styled.span`
     position: relative;
-    
-    bottom: 60px;
+    bottom: 50px;
     float: right;
+    padding-right: 5px;
 `;
 
 export const SearchBar: React.FC<SearchBarProps> = ({initialValue}) => {

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import 'antd/dist/antd.css';
+import { List, Card } from 'antd';
 
 export const ArtistDetails = () => {
     const [albums, setAlbums] = useState<any>([]);
