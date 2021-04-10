@@ -9,15 +9,12 @@ function App() {
   return (
     <Router>
       <div>
-      
-        <div style={{minHeight:'600px', marginTop:'100px', marginBottom:'200px'}}>
-          <Route path="/" exact component={Search} />
-          <Route path="/log-in" exact component={Login} />
-          <Route path="/artists" exact component={Artists} />
-          <Route path="/artists/:artistId" exact component={ArtistDetails} />
-        </div> 
-      
-      </div>
+        <Route path="/" exact component={Search} />
+        <Route path="/log-in" exact component={Login} />
+        <Route path="/artists" exact component={Artists} />
+        <Route path="/artists/:artistId" exact component={ArtistDetails} />
+      </div> 
+
     </Router>
     
   );
