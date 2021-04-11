@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { List } from 'antd';
 import { AlbumItem } from '../components/AlbumItem';
@@ -24,11 +25,18 @@ const SecondHeader = styled.div`
     color: #67738a;
 `;
 
-export const ArtistDetails = () => {
+type AlbumParam = {
+    name: string,
+    artistId: string
+}
+
+export const Albums = () => {
+    const { name, artistId } = useParams<AlbumParam>();
     const [albums, setAlbums] = useState<any>([]);
-    const bearer = 'Bearer ' + 'BQB5-cH6ECsfb37WJBQv-u_L_5ysY-IP8FT0A6t5oIsl6ozW54ZKGgHjZBd-EJZlVky576Aq4DZlItwnzgA-gmzPmygU-JgF482H6gPLEIqvLTRQWms1G4uc6HLWsx6ntYVz0w';
+    const token = 'BQCZwBKl_K8m_-OeRU0HVKad-euLJY2-v4paknjYEKhBdg9NtEIe2HxAkjkF_iYFY0hdQAOwg95zUgMSf8mRzqzbOiiqwBwuyVLKFHhuvpeqOqTy9-jj6FBZ1ZJAtoQkp8h2_w';
+    const bearer = 'Bearer ' + token;
     useEffect(()=>{
-        fetch('https://api.spotify.com/v1/artists/74NBPbyyftqJ4SpDZ4c1Ed/albums',
+        fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
         {
             method: 'GET',
             headers: {
@@ -42,11 +50,12 @@ export const ArtistDetails = () => {
             setAlbums(data.items);
         })
         .catch(console.log)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     return (
         <>
-            <MainHeader>Tom Petty</MainHeader>
+            <MainHeader>{name}</MainHeader>
             <SecondHeader>Albums</SecondHeader>
             <ListWrapper>
                 <List

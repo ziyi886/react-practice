@@ -1,5 +1,6 @@
 import React from 'react';
 import { SearchBar } from '../components/SearchBar';
+import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 
 const SearchWrapper = styled.div`
@@ -11,10 +12,15 @@ const SearchWrapper = styled.div`
 `;
 
 export const Search = () => {
+    const history = useHistory();
+
+    const onEnter = (content: string) => {
+        history.push(`/artists/${content}`)
+    }
 
     return (
         <SearchWrapper>
-            <SearchBar initialValue="" />
+            <SearchBar initialValue="" onEnter={onEnter}/>
         </SearchWrapper>
     )
 }

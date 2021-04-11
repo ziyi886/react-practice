@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 interface SearchBarProps{
     initialValue: string;
+    onEnter: (content: string)=> void;
 }
 
 const SearchWrapper = styled.div`
@@ -30,10 +31,16 @@ const IconWrapper = styled.span`
     padding-right: 5px;
 `;
 
-export const SearchBar: React.FC<SearchBarProps> = ({initialValue}) => {
+export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter}) => {
     const [searchTerm, setSearchTerm] = useState<string>(initialValue);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setSearchTerm(e.target.value);
+    }
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            onEnter(e.currentTarget.value as string);
+        }
     }
 
     return (
@@ -43,6 +50,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue}) => {
                 placeholder="Search for an artist..."
                 value={searchTerm}
                 onChange={handleChange}
+                onKeyPress={handleKeyPress}
             />
             <IconWrapper>
                 <SearchIcon />
