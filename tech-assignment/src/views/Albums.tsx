@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { List } from 'antd';
 import { AlbumItem } from '../components/AlbumItem';
@@ -33,23 +33,30 @@ type AlbumParam = {
 export const Albums = () => {
     const { name, artistId } = useParams<AlbumParam>();
     const [albums, setAlbums] = useState<any>([]);
-    const token = 'BQCZwBKl_K8m_-OeRU0HVKad-euLJY2-v4paknjYEKhBdg9NtEIe2HxAkjkF_iYFY0hdQAOwg95zUgMSf8mRzqzbOiiqwBwuyVLKFHhuvpeqOqTy9-jj6FBZ1ZJAtoQkp8h2_w';
-    const bearer = 'Bearer ' + token;
+    const history = useHistory();
+
     useEffect(()=>{
-        fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
-        {
-            method: 'GET',
-            headers: {
-                'Authorization': bearer,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then((data) => {
-            setAlbums(data.items);
-        })
-        .catch(console.log)
+        const token = window.sessionStorage.getItem("token");
+        if(!token || token === undefined){
+            history.push(`/log-in/`)
+        }else{
+            const bearer = 'Bearer ' + token;
+            fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
+            {
+                method: 'GET',
+                headers: {
+                    'Authorization': bearer,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then((data) => {
+                setAlbums(data.items);
+            })
+            .catch(console.log)
+        }
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SearchBar } from '../components/SearchBar';
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
@@ -13,7 +13,13 @@ const SearchWrapper = styled.div`
 
 export const Search = () => {
     const history = useHistory();
-
+    useEffect(()=>{
+        const token = window.sessionStorage.getItem("token");
+        if(!token || token === undefined){
+            history.push(`/log-in/`)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
     const onEnter = (content: string) => {
         history.push(`/artists/${content}`)
     }

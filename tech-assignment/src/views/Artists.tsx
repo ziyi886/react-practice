@@ -28,33 +28,39 @@ export const Artists = () => {
     const [artists, setArtists] = useState<any>([]);
     const [searchContent, setSearchContent] = useState<string>(name);
     const history = useHistory();
-    const token = 'BQCZwBKl_K8m_-OeRU0HVKad-euLJY2-v4paknjYEKhBdg9NtEIe2HxAkjkF_iYFY0hdQAOwg95zUgMSf8mRzqzbOiiqwBwuyVLKFHhuvpeqOqTy9-jj6FBZ1ZJAtoQkp8h2_w';
-    const bearer = 'Bearer ' + token;
+    
     useEffect(()=>{
-        fetch(`https://api.spotify.com/v1/search?q=${searchContent}&type=artist`,
-        {
-            method: 'GET',
-            headers: {
-                'Authorization': bearer,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then((data) => {
-          setArtists(data.artists.items);
-        })
-        .catch(console.log)
+        const token = window.sessionStorage.getItem("token");
+        if(!token || token === undefined){
+            history.push(`/log-in/`)
+        }else{
+            const bearer = 'Bearer ' + token;
+            fetch(`https://api.spotify.com/v1/search?q=${searchContent}&type=artist`,
+            {
+                method: 'GET',
+                headers: {
+                    'Authorization': bearer,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then((data) => {
+            setArtists(data.artists.items);
+            })
+            .catch(console.log)
+        }
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[searchContent])
 
     const handleOnClick = (id: string, name: string) =>{
-        history.push(`/albumns/${name}/${id}`);
+        history.push(`/albums/${name}/${id}`);
     }
 
     const onEnter = (content: string) => {
         setSearchContent(content);
-        history.push(`/artists/${content}`)
+        history.push(`/artists/${content}`);
     }
 
     return (

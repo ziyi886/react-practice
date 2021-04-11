@@ -2,6 +2,10 @@ import React from 'react';
 import { SpotifyIcon } from '../assets/icons/SpotifyIcon';
 import styled from 'styled-components';
 
+interface LoginButtonProps{
+    onClick: ()=> void;
+};
+
 const IconWrapper = styled.span`
     float: right;
 `;
@@ -22,10 +26,10 @@ const StyledButton = styled.button`
     padding-bottom: 12px;
 `;
 
-export const LoginButton = () => {
+export const LoginButton: React.FC<LoginButtonProps> = ({onClick}) => {
 
     return (
-        <StyledButton>
+        <StyledButton onClick={onClick}>
             Login 
             <IconWrapper>
                 <SpotifyIcon/>
