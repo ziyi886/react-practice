@@ -9,7 +9,6 @@ interface SearchBarProps{
 
 const SearchWrapper = styled.div`
     height: 60px;
-    
 `;
 
 const StyledInput = styled.input`

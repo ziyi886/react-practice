@@ -7,33 +7,35 @@ interface LoginButtonProps{
 };
 
 const IconWrapper = styled.span`
+    position: relative;
+    bottom: 50px;
     float: right;
+    padding-right: 3px;
+    padding-top: 2px;
 `;
 
 const StyledButton = styled.button`
-    width: 40%; 
+    width: 100%;
     height: 60px;
-    margin: auto;
-    display: block;
-    position: relative;
-    top: 300px;
     background-color: white;
     font-size: 25px;
     text-align: center;
     border-radius: 10px;
     border: 0.5px solid #969696;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding: 10px 0;
 `;
 
 export const LoginButton: React.FC<LoginButtonProps> = ({onClick}) => {
 
     return (
+        <>
         <StyledButton onClick={onClick}>
             Login 
-            <IconWrapper>
-                <SpotifyIcon/>
-            </IconWrapper>
+            
         </StyledButton>
+        <IconWrapper>
+            <SpotifyIcon/>
+        </IconWrapper>
+        </>
     )
 }

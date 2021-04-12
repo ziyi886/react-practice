@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { List } from 'antd';
 import { AlbumItem } from '../components/AlbumItem';
+import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
 
 const ListWrapper = styled.div`
@@ -60,13 +61,28 @@ export const Albums = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
+    const tabletBreakPoint = 1200;
+    const phoneBreakPoint = 680;
+    const { width } = useViewport();
+    const [ column, setColumn ] = useState(4);
+
+    useEffect(()=>{
+        if(width>tabletBreakPoint){
+            setColumn(4);
+        }else if(width>phoneBreakPoint){
+            setColumn(2);
+        }else {
+            setColumn(1);
+        }
+    }, [width]);
+
     return (
         <>
             <MainHeader>{name}</MainHeader>
             <SecondHeader>Albums</SecondHeader>
             <ListWrapper>
                 <List
-                    grid={{ gutter: 16, column: 4 }}
+                    grid={{ gutter: 16, column: column }}
                     dataSource={albums}
                     renderItem={(item: any) => (
                     <List.Item>

@@ -1,5 +1,14 @@
 import React from 'react';
 import { LoginButton } from '../components/LoginButton';
+import styled from 'styled-components';
+
+const ButtonWrapper = styled.div`
+    position: relative;
+    top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+`;
 
 export const Login = () => {
     const authEndpoint = `https://accounts.spotify.com/authorize`;
@@ -10,6 +19,8 @@ export const Login = () => {
         window.location.href=`${authEndpoint}?client_id=${clientID}&response_type=token&redirect_uri=${redirectUrl}&scope=user-read-private%20user-read-email`;
     }
     return (
-        <LoginButton onClick={onClick}/>
+        <ButtonWrapper>
+            <LoginButton onClick={onClick}/>
+        </ButtonWrapper>
     )
 }

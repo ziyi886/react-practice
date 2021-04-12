@@ -1,14 +1,23 @@
 import React, { useEffect } from 'react';
 import { SearchBar } from '../components/SearchBar';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
+import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
 
 const SearchWrapper = styled.div`
     position: relative;
-    top: 300px;
+    top: 200px;
     margin-left: auto;
     margin-right: auto;
-    width: 40%;
+    width: 50%;
+`;
+
+const MobileSearchWrapper = styled.div`
+    position: relative;
+    top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
 `;
 
 export const Search = () => {
@@ -24,9 +33,16 @@ export const Search = () => {
         history.push(`/artists/${content}`)
     }
 
-    return (
+    const { width } = useViewport();
+    const breakpoint = 780;
+
+    return width < breakpoint ? (
+        <MobileSearchWrapper>
+            <SearchBar initialValue="" onEnter={onEnter}/>
+        </MobileSearchWrapper>
+    ) : (
         <SearchWrapper>
             <SearchBar initialValue="" onEnter={onEnter}/>
         </SearchWrapper>
-    )
+    );
 }

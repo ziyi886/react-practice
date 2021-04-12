@@ -26,6 +26,12 @@ const InfoWrapper = styled.div`
     border-top: 1px solid #969696;
     box-sizing: border-box;
     padding: 10px;
+    height: 150px;
+`;
+
+const RateWrapper = styled.div`
+    position: absolute;
+    bottom: 10px;
 `;
 
 const NameWrapper = styled.div`
@@ -51,7 +57,9 @@ export const ArtistListItem: React.FC<ArtistListItemProps> =
                 <FollowerWrapper>
                     {`${formattedFollower} followers`}
                 </FollowerWrapper>
-                <Rate disabled allowHalf defaultValue={rate} />
+                <RateWrapper>
+                    <Rate disabled allowHalf defaultValue={rate} />
+                </RateWrapper>
             </InfoWrapper>
 
         </ItemWrapper>

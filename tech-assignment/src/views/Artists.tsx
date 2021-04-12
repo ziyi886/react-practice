@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { ArtistListItem } from '../components/ArtistListItem';
 import { SearchBar } from '../components/SearchBar';
+import { useViewport } from '../utils/useViewPort';
 import { List } from 'antd';
 import styled from 'styled-components';
 
@@ -13,10 +14,10 @@ const ListWrapper = styled.div`
 `;
 
 const SearchWrapper = styled.div`
-    width: 40%;
+    width: 60%;
     position: absolute;
-    top: 20px;
-    left: 30%;
+    top: 70px;
+    left: 20%;
 `;
 
 type ArtistsParam = {
@@ -63,12 +64,27 @@ export const Artists = () => {
         history.push(`/artists/${content}`);
     }
 
+    const tabletBreakPoint = 1200;
+    const phoneBreakPoint = 680;
+    const { width } = useViewport();
+    const [ column, setColumn ] = useState(4);
+
+    useEffect(()=>{
+        if(width>tabletBreakPoint){
+            setColumn(4);
+        }else if(width>phoneBreakPoint){
+            setColumn(2);
+        }else {
+            setColumn(1);
+        }
+    }, [width]);
+
     return (
         <>
             <ListWrapper>
                 
                 <List
-                    grid={{ gutter: 16, column: 4 }}
+                    grid={{ gutter: 16, column: column }}
                     dataSource={artists}
                     renderItem={(item: any) => (
                     <List.Item>
