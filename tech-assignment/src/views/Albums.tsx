@@ -5,6 +5,7 @@ import { List } from 'antd';
 import { AlbumItem } from '../components/AlbumItem';
 import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
+import Cookies from 'universal-cookie';
 
 const ListWrapper = styled.div`
     width: 96%;
@@ -37,8 +38,9 @@ export const Albums = () => {
     const history = useHistory();
 
     useEffect(()=>{
-        const token = window.sessionStorage.getItem("token");
-        if(!token || token === undefined){
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        if(!token){
             history.push(`/log-in/`)
         }else{
             const bearer = 'Bearer ' + token;

@@ -3,6 +3,7 @@ import { SearchBar } from '../components/SearchBar';
 import { useHistory } from 'react-router-dom';
 import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
+import Cookies from 'universal-cookie';
 
 const SearchWrapper = styled.div`
     position: relative;
@@ -23,8 +24,9 @@ const MobileSearchWrapper = styled.div`
 export const Search = () => {
     const history = useHistory();
     useEffect(()=>{
-        const token = window.sessionStorage.getItem("token");
-        if(!token || token === undefined){
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        if(!token){
             history.push(`/log-in/`)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps

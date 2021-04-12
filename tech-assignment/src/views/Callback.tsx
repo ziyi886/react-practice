@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
+import Cookies from 'universal-cookie';
 
 const CallbackWrapper = styled.div`
     position: relative;
@@ -15,7 +16,8 @@ export const Callback = () => {
     const hash = window.location.hash.substr(1);
     const parts = hash.split('=');
     const rawToken = parts[1];
-    window.sessionStorage.setItem("token", rawToken);
+    const cookies = new Cookies();
+    cookies.set('token', rawToken, { path: '/', expires: new Date(Date.now()+7200000) });
     const history = useHistory();
     setTimeout(() => {
         history.push(`/`);
