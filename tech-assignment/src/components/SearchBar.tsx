@@ -5,6 +5,7 @@ import styled from 'styled-components';
 interface SearchBarProps{
     initialValue: string;
     onEnter: (content: string)=> void;
+    searchPossible: (term: string) => Promise<string[]>;
 }
 
 const SearchWrapper = styled.div`
@@ -30,12 +31,52 @@ const IconWrapper = styled.span`
     padding-right: 5px;
 `;
 
-export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter}) => {
+const DropDownWrapper = styled.ul`
+    width: 100%;
+    border: 0.5px solid #969696;
+    list-style: none;
+    padding-left: 0;
+    background-color: white;
+`;
+
+const Option = styled.li`
+    height: 40px; 
+    &:hover{
+        background-color: #d7d7d7;
+    }
+    font-size: 1rem;
+    padding-left: 1%;
+`;
+
+export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, searchPossible}) => {
     const [searchTerm, setSearchTerm] = useState<string>(initialValue);
+    const [possibleList, setPossibleList] = useState<string[]>();
+
+    let typingTimer: ReturnType<typeof setTimeout>;
+    const doneTypingInterval = 500;
+
+    const onKeyDown = () => {
+        clearTimeout(typingTimer);
+    }
+
+    const onKeyUp = () => {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(()=> {
+            if(searchTerm.length>0){
+                const possibles = searchPossible(searchTerm);
+                possibles.then((result) => setPossibleList(result.map((item: any)=> item.name).slice(0,5)));
+            }
+        }, doneTypingInterval);
+    }
+
+    const onBlur = () => {
+        setPossibleList(undefined);
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setSearchTerm(e.target.value);
     }
-
+    
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             onEnter(e.currentTarget.value as string);
@@ -49,11 +90,28 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter}) => 
                 placeholder="Search for an artist..."
                 value={searchTerm}
                 onChange={handleChange}
+                onKeyDown={onKeyDown}
+                onKeyUp={onKeyUp}
+                onBlur={onBlur}
                 onKeyPress={handleKeyPress}
             />
             <IconWrapper>
                 <SearchIcon />
             </IconWrapper>
+            {(possibleList && searchTerm.length>0) &&    
+            <DropDownWrapper>
+                
+                {possibleList.map((possible: string)=>
+                (
+                    <Option onMouseDown={()=>{
+                        setSearchTerm(possible);
+                        onEnter(possible);
+                        }}>
+                        {possible}
+                    </Option>
+                ))}
+                
+            </DropDownWrapper>}
         </SearchWrapper>
     )
 }

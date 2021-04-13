@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SearchBar } from '../components/SearchBar';
 import { useHistory } from 'react-router-dom';
 import { useViewport } from '../utils/useViewPort';
@@ -23,14 +23,12 @@ const MobileSearchWrapper = styled.div`
 
 export const Search = () => {
     const history = useHistory();
-    useEffect(()=>{
-        const cookies = new Cookies();
-        const token = cookies.get('token');
-        if(!token){
-            history.push(`/log-in/`)
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+    if(!token){
+        history.push(`/log-in/`)
+    }
+
     const onEnter = (content: string) => {
         history.push(`/artists/${content}`)
     }
@@ -38,13 +36,36 @@ export const Search = () => {
     const { width } = useViewport();
     const breakpoint = 780;
 
+    const searchPossible = async (term: string) : Promise<string[]> => {
+        const bearer = 'Bearer ' + token;
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist`,
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': bearer,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
+        return data.artists?.items;
+    }
+
     return width < breakpoint ? (
         <MobileSearchWrapper>
-            <SearchBar initialValue="" onEnter={onEnter}/>
+            <SearchBar 
+                initialValue="" 
+                onEnter={onEnter}
+                searchPossible={searchPossible}
+            />
         </MobileSearchWrapper>
     ) : (
         <SearchWrapper>
-            <SearchBar initialValue="" onEnter={onEnter}/>
+            <SearchBar 
+                initialValue="" 
+                onEnter={onEnter}
+                searchPossible={searchPossible}
+            />
         </SearchWrapper>
     );
 }

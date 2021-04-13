@@ -28,42 +28,42 @@ type ArtistsParam = {
 export const Artists = () => {
     const { name } = useParams<ArtistsParam>();
     const [artists, setArtists] = useState<any>([]);
-    const [searchContent, setSearchContent] = useState<string>(name);
     const history = useHistory();
-    
+    const [curSearch, setCurSearch] = useState(name);
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+
+    const searchPossible = async (term: string) : Promise<string[]> => {
+        const bearer = 'Bearer ' + token;
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist`,
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': bearer,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
+        return data.artists?.items;
+    }
+
     useEffect(()=>{
-        const cookies = new Cookies();
-        const token = cookies.get('token');
         if(!token){
             history.push(`/log-in/`)
         }else{
-            const bearer = 'Bearer ' + token;
-            fetch(`https://api.spotify.com/v1/search?q=${searchContent}&type=artist`,
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': bearer,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then((data) => {
-            setArtists(data.artists.items);
-            })
-            .catch(console.log)
+            const artists = searchPossible(curSearch);
+            artists.then((result) => setArtists(result));
         }
-  
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[searchContent])
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[curSearch])
+    
     const handleOnClick = (id: string, name: string) =>{
         history.push(`/albums/${name}/${id}`);
     }
 
     const onEnter = (content: string) => {
-        setSearchContent(content);
-        history.push(`/artists/${content}`);
+        setCurSearch(content);
     }
 
     const tabletBreakPoint = 1200;
@@ -92,7 +92,7 @@ export const Artists = () => {
                     <List.Item>
                         <ArtistListItem 
                             name={item.name}
-                            img={item.images[0].url}
+                            img={item.images[0]?.url}
                             follower={item.followers.total}
                             popularity={item.popularity}
                             onClick={()=> handleOnClick(item.id, item.name)}
@@ -102,7 +102,11 @@ export const Artists = () => {
                 />
             </ListWrapper>
             <SearchWrapper>
-                <SearchBar initialValue={searchContent} onEnter={onEnter}/>
+                <SearchBar 
+                    initialValue={name} 
+                    onEnter={onEnter}
+                    searchPossible={searchPossible}
+                />
             </SearchWrapper>
         </>
         

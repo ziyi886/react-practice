@@ -36,28 +36,31 @@ export const Albums = () => {
     const { name, artistId } = useParams<AlbumParam>();
     const [albums, setAlbums] = useState<any>([]);
     const history = useHistory();
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+
+    const searchAlbum = async (term: string) => {
+        const bearer = 'Bearer ' + token;
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': bearer,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
+        return data?.items;
+    }
 
     useEffect(()=>{
-        const cookies = new Cookies();
-        const token = cookies.get('token');
+        
         if(!token){
             history.push(`/log-in/`)
         }else{
-            const bearer = 'Bearer ' + token;
-            fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': bearer,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then((data) => {
-                setAlbums(data.items);
-            })
-            .catch(console.log)
+            const rawResult = searchAlbum(artistId);
+            rawResult.then((result) => setAlbums(result));
         }
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +93,7 @@ export const Albums = () => {
                     <List.Item>
                         <AlbumItem 
                             name={item.name}
-                            img={item.images[0].url}
+                            img={item.images[0]?.url}
                             artists={item.artists.map((artist:any) => artist.name)}
                             date={item.release_date}
                             track={item.total_tracks}

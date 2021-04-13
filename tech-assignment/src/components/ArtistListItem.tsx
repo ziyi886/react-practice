@@ -17,9 +17,15 @@ const ItemWrapper = styled.div`
     border: 1px solid #969696;
 `;
 
-const Photo = styled.img`
+const PhotoWrapper = styled.div`
     width: 100%;
     height: 400px;
+    background: url(https://www.nomadfoods.com/wp-content/uploads/2018/08/placeholder-1-e1533569576673-960x960.png);
+`;
+
+const Photo = styled.img`
+    width: 100%;
+    height: 100%;
 `;
 
 const InfoWrapper = styled.div`
@@ -50,8 +56,9 @@ export const ArtistListItem: React.FC<ArtistListItemProps> =
 
     return (
         <ItemWrapper onClick={onClick}>
-            <Photo src={img} alt="Artist_Image" />
-    
+            <PhotoWrapper>
+                <Photo src={img} />
+            </PhotoWrapper>
             <InfoWrapper>
                 <NameWrapper>{name}</NameWrapper>
                 <FollowerWrapper>
