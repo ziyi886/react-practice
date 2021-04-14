@@ -29,18 +29,19 @@ const PageControlWrapper = styled.div`
 `;
 
 type ArtistsParam = {
-    name: string
+    name: string,
+    curPage: string
 }
 
 export const Artists = () => {
-    const { name } = useParams<ArtistsParam>();
+    const { name, curPage } = useParams<ArtistsParam>();
     const [artists, setArtists] = useState<any>([]);
     const history = useHistory();
     const [curSearch, setCurSearch] = useState(name);
     const cookies = new Cookies();
     const token = cookies.get('token');
     const pageItemNum = 8;
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(Number(curPage));
     const [totalPage, setTotalPage] = useState(100);
     const searchPossible = async (term: string) : Promise<any> => {
         const bearer = 'Bearer ' + token;
@@ -99,18 +100,24 @@ export const Artists = () => {
     const handleGoBack = () => {
         setPage((page) => {
             if(page>1){
+                history.push(`/artists/${curSearch}/${page-1}`)
                 return page-1;
             }
+            history.push(`/artists/${curSearch}/${page}`)
             return page;
-        })
+        });
+        
     }
 
     const handleNextPage = () => {
         setPage((page) => {
-            if(page<totalPage)
+            if(page<totalPage){
+                history.push(`/artists/${curSearch}/${page+1}`)
                 return page+1;
+            }   
+            history.push(`/artists/${curSearch}/${page}`)
             return page;
-        })
+        });
     }
 
     return (

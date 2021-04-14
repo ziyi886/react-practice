@@ -30,7 +30,7 @@ export const Search = () => {
     }
 
     const onEnter = (content: string) => {
-        history.push(`/artists/${content}`)
+        history.push(`/artists/${content}/1`)
     }
 
     const { width } = useViewport();

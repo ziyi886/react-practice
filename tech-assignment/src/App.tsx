@@ -25,7 +25,7 @@ function App() {
         <div>
           <Route path="/" exact component={Search} />
           <Route path="/log-in" exact component={Login} />
-          <Route path="/artists/:name" exact component={Artists} />
+          <Route path="/artists/:name/:curPage" exact component={Artists} />
           <Route path="/albums/:name/:artistId" exact component={Albums} />
           <Route path="/callback" exact component={Callback} />
         </div> 
