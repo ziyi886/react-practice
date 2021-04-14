@@ -48,7 +48,7 @@ export const Search = () => {
             }
         })
         const data = await response.json();
-        return data.artists?.items;
+        return data.artists;
     }
 
     return width < breakpoint ? (

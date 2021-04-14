@@ -6,6 +6,7 @@ import { useViewport } from '../utils/useViewPort';
 import { List } from 'antd';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
+import { PageControl } from '../components/PageControl';
 
 const ListWrapper = styled.div`
     width: 90%;
@@ -21,6 +22,12 @@ const SearchWrapper = styled.div`
     left: 20%;
 `;
 
+const PageControlWrapper = styled.div`
+    width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+`;
+
 type ArtistsParam = {
     name: string
 }
@@ -32,10 +39,13 @@ export const Artists = () => {
     const [curSearch, setCurSearch] = useState(name);
     const cookies = new Cookies();
     const token = cookies.get('token');
-
-    const searchPossible = async (term: string) : Promise<string[]> => {
+    const pageItemNum = 8;
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(100);
+    const searchPossible = async (term: string) : Promise<any> => {
         const bearer = 'Bearer ' + token;
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist`,
+        const offSet = page ? (page-1) * 8 : 0;
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist&limit=${pageItemNum}&offset=${offSet}`,
         {
             method: 'GET',
             headers: {
@@ -45,7 +55,7 @@ export const Artists = () => {
             }
         })
         const data = await response.json();
-        return data.artists?.items;
+        return data.artists;
     }
 
     useEffect(()=>{
@@ -53,16 +63,21 @@ export const Artists = () => {
             history.push(`/log-in/`)
         }else{
             const artists = searchPossible(curSearch);
-            artists.then((result) => setArtists(result));
+            artists.then((result) => setArtists(result?.items));
+            artists.then((result) => 
+            setTotalPage(Math.floor(result?.total/pageItemNum) > 0 
+                ? Math.floor(result?.total/pageItemNum) 
+                : 1));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[curSearch])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[curSearch, page])
     
     const handleOnClick = (id: string, name: string) =>{
         history.push(`/albums/${name}/${id}`);
     }
 
     const onEnter = (content: string) => {
+        setPage(1);
         setCurSearch(content);
     }
 
@@ -80,6 +95,23 @@ export const Artists = () => {
             setColumn(1);
         }
     }, [width]);
+
+    const handleGoBack = () => {
+        setPage((page) => {
+            if(page>1){
+                return page-1;
+            }
+            return page;
+        })
+    }
+
+    const handleNextPage = () => {
+        setPage((page) => {
+            if(page<totalPage)
+                return page+1;
+            return page;
+        })
+    }
 
     return (
         <>
@@ -108,6 +140,14 @@ export const Artists = () => {
                     searchPossible={searchPossible}
                 />
             </SearchWrapper>
+            <PageControlWrapper>
+                <PageControl 
+                    page={page}
+                    totalPage={totalPage}
+                    handleGoBack={handleGoBack}
+                    handleNextPage={handleNextPage}
+                />
+            </PageControlWrapper>
         </>
         
     )

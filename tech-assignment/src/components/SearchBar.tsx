@@ -5,7 +5,7 @@ import styled from 'styled-components';
 interface SearchBarProps{
     initialValue: string;
     onEnter: (content: string)=> void;
-    searchPossible: (term: string) => Promise<string[]>;
+    searchPossible: (term: string) => Promise<any>;
 }
 
 const SearchWrapper = styled.div`
@@ -64,7 +64,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, sear
         typingTimer = setTimeout(()=> {
             if(searchTerm.length>0){
                 const possibles = searchPossible(searchTerm);
-                possibles.then((result) => setPossibleList(result.map((item: any)=> item.name).slice(0,5)));
+                possibles.then((result) => setPossibleList(result?.items.map((item: any)=> item.name).slice(0,5)));
             }
         }, doneTypingInterval);
     }

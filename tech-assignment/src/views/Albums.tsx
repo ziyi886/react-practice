@@ -6,6 +6,7 @@ import { AlbumItem } from '../components/AlbumItem';
 import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
+import { PageControl } from '../components/PageControl';
 
 const ListWrapper = styled.div`
     width: 96%;
@@ -27,6 +28,12 @@ const SecondHeader = styled.div`
     color: #67738a;
 `;
 
+const PageControlWrapper = styled.div`
+    width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+`;
+
 type AlbumParam = {
     name: string,
     artistId: string
@@ -38,10 +45,14 @@ export const Albums = () => {
     const history = useHistory();
     const cookies = new Cookies();
     const token = cookies.get('token');
+    const pageItemNum = 8;
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     const searchAlbum = async (term: string) => {
         const bearer = 'Bearer ' + token;
-        const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`,
+        const offSet = page ? (page-1) * 8 : 0;
+        const response = await fetch(`https://api.spotify.com/v1/artists/${term}/albums?limit=${pageItemNum}&offset=${offSet}`,
         {
             method: 'GET',
             headers: {
@@ -51,7 +62,7 @@ export const Albums = () => {
             }
         })
         const data = await response.json();
-        return data?.items;
+        return data;
     }
 
     useEffect(()=>{
@@ -60,11 +71,15 @@ export const Albums = () => {
             history.push(`/log-in/`)
         }else{
             const rawResult = searchAlbum(artistId);
-            rawResult.then((result) => setAlbums(result));
+            rawResult.then((result) => setAlbums(result?.items));
+            rawResult.then((result) => 
+                setTotalPage(Math.floor(result?.total/pageItemNum) > 0 
+                    ? Math.floor(result?.total/pageItemNum) 
+                    : 1));
         }
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    },[page])
 
     const tabletBreakPoint = 1200;
     const phoneBreakPoint = 680;
@@ -80,6 +95,24 @@ export const Albums = () => {
             setColumn(1);
         }
     }, [width]);
+
+
+    const handleGoBack = () => {
+        setPage((page) => {
+            if(page>1){
+                return page-1;
+            }
+            return page;
+        })
+    }
+
+    const handleNextPage = () => {
+        setPage((page) => {
+            if(page<totalPage)
+                return page+1;
+            return page;
+        })
+    }
 
     return (
         <>
@@ -103,6 +136,15 @@ export const Albums = () => {
                     )}
                 />
             </ListWrapper>
+
+            <PageControlWrapper>
+                <PageControl 
+                    page={page}
+                    totalPage={totalPage}
+                    handleGoBack={handleGoBack}
+                    handleNextPage={handleNextPage}
+                />
+            </PageControlWrapper>
         </>
     )
 }
