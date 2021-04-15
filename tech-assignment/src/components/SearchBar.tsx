@@ -101,9 +101,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, sear
             {(possibleList && searchTerm.length>0) &&    
             <DropDownWrapper>
                 
-                {possibleList.map((possible: string)=>
+                {possibleList.map((possible: string, index)=>
                 (
-                    <Option onMouseDown={()=>{
+                    <Option key={index} onMouseDown={()=>{
                         setSearchTerm(possible);
                         onEnter(possible);
                         }}>

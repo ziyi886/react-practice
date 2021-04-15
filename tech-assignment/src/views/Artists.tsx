@@ -63,6 +63,7 @@ export const Artists = () => {
         if(!token){
             history.push(`/log-in/`)
         }else{
+            history.push(`/artists/${curSearch}/${page}`)
             const artists = searchPossible(curSearch);
             artists.then((result) => setArtists(result?.items));
             artists.then((result) => 
@@ -100,10 +101,8 @@ export const Artists = () => {
     const handleGoBack = () => {
         setPage((page) => {
             if(page>1){
-                history.push(`/artists/${curSearch}/${page-1}`)
                 return page-1;
             }
-            history.push(`/artists/${curSearch}/${page}`)
             return page;
         });
         
@@ -112,10 +111,8 @@ export const Artists = () => {
     const handleNextPage = () => {
         setPage((page) => {
             if(page<totalPage){
-                history.push(`/artists/${curSearch}/${page+1}`)
                 return page+1;
             }   
-            history.push(`/artists/${curSearch}/${page}`)
             return page;
         });
     }
