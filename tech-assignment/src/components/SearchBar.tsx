@@ -2,10 +2,31 @@ import React, { useState } from 'react';
 import { SearchIcon } from '../assets/icons/SearchIcon';
 import styled from 'styled-components';
 
+type Image = {
+    height: number,
+    width: number,
+    url: string
+}
+
+export type ArtistItem = {
+    followers: {
+        total: number
+    },
+    id: string,
+    images: Image[],
+    name: string,
+    popularity: number
+}
+
+export type ArtistList = {
+    items: [ArtistItem],
+    total: number
+}
+
 interface SearchBarProps{
     initialValue: string;
     onEnter: (content: string)=> void;
-    searchPossible: (term: string) => Promise<any>;
+    searchPossible: (term: string) => Promise<ArtistList>;
 }
 
 const SearchWrapper = styled.div`
@@ -64,7 +85,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, sear
         typingTimer = setTimeout(()=> {
             if(searchTerm.length>0){
                 const possibles = searchPossible(searchTerm);
-                possibles.then((result) => setPossibleList(result?.items.map((item: any)=> item.name).slice(0,5)));
+                possibles.then((result) => setPossibleList(result?.items.map((item: ArtistItem)=> item.name).slice(0,5)));
             }
         }, doneTypingInterval);
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchBar } from '../components/SearchBar';
+import { SearchBar, ArtistList } from '../components/SearchBar';
 import { useHistory } from 'react-router-dom';
 import { useViewport } from '../utils/useViewPort';
 import styled from 'styled-components';
@@ -36,7 +36,7 @@ export const Search = () => {
     const { width } = useViewport();
     const breakpoint = 780;
 
-    const searchPossible = async (term: string) : Promise<string[]> => {
+    const searchPossible = async (term: string) : Promise<ArtistList> => {
         const bearer = 'Bearer ' + token;
         const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist`,
         {

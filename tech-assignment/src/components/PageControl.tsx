@@ -7,7 +7,7 @@ interface PageControlProps{
     handleNextPage: () => void;
 }
 
-const Wrapper = styled.button`
+const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;

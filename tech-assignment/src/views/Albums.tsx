@@ -39,9 +39,30 @@ type AlbumParam = {
     artistId: string
 }
 
+type ArtistListItem = {
+    name: string
+}
+
+type Image = {
+    height: number,
+    width: number,
+    url: string
+}
+
+type AlbumUnit = { 
+    artists: ArtistListItem[],
+    external_urls: {
+        spotify: string
+    },
+    images: Image[],
+    name: string,
+    release_date: string,
+    total_tracks: number
+}
+
 export const Albums = () => {
     const { name, artistId } = useParams<AlbumParam>();
-    const [albums, setAlbums] = useState<any>([]);
+    const [albums, setAlbums] = useState<AlbumUnit[]>([]);
     const history = useHistory();
     const cookies = new Cookies();
     const token = cookies.get('token');
@@ -122,12 +143,12 @@ export const Albums = () => {
                 <List
                     grid={{ gutter: 16, column: column }}
                     dataSource={albums}
-                    renderItem={(item: any) => (
+                    renderItem={(item: AlbumUnit) => (
                     <List.Item>
                         <AlbumItem 
                             name={item.name}
                             img={item.images[0]?.url}
-                            artists={item.artists.map((artist:any) => artist.name)}
+                            artists={item.artists.map((artist:ArtistListItem) => artist.name)}
                             date={item.release_date}
                             track={item.total_tracks}
                             link={item.external_urls.spotify}

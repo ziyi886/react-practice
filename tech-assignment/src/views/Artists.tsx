@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { ArtistListItem } from '../components/ArtistListItem';
-import { SearchBar } from '../components/SearchBar';
+import { SearchBar, ArtistList, ArtistItem } from '../components/SearchBar';
 import { useViewport } from '../utils/useViewPort';
 import { List } from 'antd';
 import styled from 'styled-components';
@@ -35,7 +35,7 @@ type ArtistsParam = {
 
 export const Artists = () => {
     const { name, curPage } = useParams<ArtistsParam>();
-    const [artists, setArtists] = useState<any>([]);
+    const [artists, setArtists] = useState<ArtistItem[]>([]);
     const history = useHistory();
     const [curSearch, setCurSearch] = useState(name);
     const cookies = new Cookies();
@@ -43,7 +43,7 @@ export const Artists = () => {
     const pageItemNum = 8;
     const [page, setPage] = useState(Number(curPage));
     const [totalPage, setTotalPage] = useState(100);
-    const searchPossible = async (term: string) : Promise<any> => {
+    const searchPossible = async (term: string) : Promise<ArtistList> => {
         const bearer = 'Bearer ' + token;
         const offSet = page ? (page-1) * 8 : 0;
         const response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=artist&limit=${pageItemNum}&offset=${offSet}`,
@@ -124,7 +124,7 @@ export const Artists = () => {
                 <List
                     grid={{ gutter: 16, column: column }}
                     dataSource={artists}
-                    renderItem={(item: any) => (
+                    renderItem={(item: ArtistItem) => (
                     <List.Item>
                         <ArtistListItem 
                             name={item.name}
