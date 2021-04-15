@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useViewport = () => {
+export const useViewport = () => { //a hook to keep track of screen width 
     const [width, setWidth] = useState(window.innerWidth);
   
     useEffect(() => {

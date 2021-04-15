@@ -29,10 +29,6 @@ export const Search = () => {
         history.push(`/log-in/`)
     }
 
-    const onEnter = (content: string) => {
-        history.push(`/artists/${content}/1`)
-    }
-
     const { width } = useViewport();
     const breakpoint = 780;
 
@@ -49,6 +45,10 @@ export const Search = () => {
         })
         const data = await response.json();
         return data.artists;
+    }
+
+    const onEnter = (content: string) => {
+        history.push(`/artists/${content}/1`)
     }
 
     return width < breakpoint ? (

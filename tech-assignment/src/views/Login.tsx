@@ -12,7 +12,7 @@ const ButtonWrapper = styled.div`
 
 export const Login = () => {
     const authEndpoint = `https://accounts.spotify.com/authorize`;
-    const clientID = `e94b6c15e07347df911d3b51df8b94d1`;
+    const clientID = ``;
     const redirectUrl = encodeURI(`http://localhost:3000/callback`);
 
     const onClick =() =>{

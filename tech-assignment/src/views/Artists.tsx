@@ -66,13 +66,28 @@ export const Artists = () => {
             history.push(`/artists/${curSearch}/${page}`)
             const artists = searchPossible(curSearch);
             artists.then((result) => setArtists(result?.items));
-            artists.then((result) => 
+            artists.then((result) => //set page number
             setTotalPage(Math.floor(result?.total/pageItemNum) > 0 
                 ? Math.floor(result?.total/pageItemNum) 
                 : 1));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[curSearch, page])
+
+    const tabletBreakPoint = 1200;
+    const phoneBreakPoint = 680;
+    const { width } = useViewport();
+    const [ column, setColumn ] = useState(4);
+
+    useEffect(()=>{ //self responsive related
+        if(width>tabletBreakPoint){
+            setColumn(4);
+        }else if(width>phoneBreakPoint){
+            setColumn(2);
+        }else {
+            setColumn(1);
+        }
+    }, [width]);
     
     const handleOnClick = (id: string, name: string) =>{
         history.push(`/albums/${name}/${id}`);
@@ -82,21 +97,6 @@ export const Artists = () => {
         setPage(1);
         setCurSearch(content);
     }
-
-    const tabletBreakPoint = 1200;
-    const phoneBreakPoint = 680;
-    const { width } = useViewport();
-    const [ column, setColumn ] = useState(4);
-
-    useEffect(()=>{
-        if(width>tabletBreakPoint){
-            setColumn(4);
-        }else if(width>phoneBreakPoint){
-            setColumn(2);
-        }else {
-            setColumn(1);
-        }
-    }, [width]);
 
     const handleGoBack = () => {
         setPage((page) => {

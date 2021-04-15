@@ -8,32 +8,6 @@ import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import { PageControl } from '../components/PageControl';
 
-const ListWrapper = styled.div`
-    width: 96%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
-`;
-
-const MainHeader = styled.div`
-    position: relative;
-    left: 2%;
-    font-size: 25px;
-`;
-
-const SecondHeader = styled.div`
-    position: relative;
-    left: 2%;
-    font-size: 20px;
-    color: #67738a;
-`;
-
-const PageControlWrapper = styled.div`
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-`;
-
 type AlbumParam = {
     name: string,
     artistId: string
@@ -59,6 +33,32 @@ type AlbumUnit = {
     release_date: string,
     total_tracks: number
 }
+
+const ListWrapper = styled.div`
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+`;
+
+const MainHeader = styled.div`
+    position: relative;
+    left: 2%;
+    font-size: 25px;
+`;
+
+const SecondHeader = styled.div`
+    position: relative;
+    left: 2%;
+    font-size: 20px;
+    color: #67738a;
+`;
+
+const PageControlWrapper = styled.div`
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+`;
 
 export const Albums = () => {
     const { name, artistId } = useParams<AlbumParam>();
@@ -93,7 +93,7 @@ export const Albums = () => {
         }else{
             const rawResult = searchAlbum(artistId);
             rawResult.then((result) => setAlbums(result?.items));
-            rawResult.then((result) => 
+            rawResult.then((result) =>     //set page number
                 setTotalPage(Math.floor(result?.total/pageItemNum) > 0 
                     ? Math.floor(result?.total/pageItemNum) 
                     : 1));
@@ -107,7 +107,7 @@ export const Albums = () => {
     const { width } = useViewport();
     const [ column, setColumn ] = useState(4);
 
-    useEffect(()=>{
+    useEffect(()=>{ //self responsive related
         if(width>tabletBreakPoint){
             setColumn(4);
         }else if(width>phoneBreakPoint){

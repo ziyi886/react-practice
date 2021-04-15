@@ -71,7 +71,7 @@ const Option = styled.li`
 
 export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, searchPossible}) => {
     const [searchTerm, setSearchTerm] = useState<string>(initialValue);
-    const [possibleList, setPossibleList] = useState<string[]>();
+    const [possibleList, setPossibleList] = useState<string[]>(); //store the possible artist list and display in dropdown
 
     let typingTimer: ReturnType<typeof setTimeout>;
     const doneTypingInterval = 500;
@@ -80,7 +80,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({initialValue, onEnter, sear
         clearTimeout(typingTimer);
     }
 
-    const onKeyUp = () => {
+    const onKeyUp = () => {   //when user stop typing for over half second, it will do a REST call and fetch the possible list
         clearTimeout(typingTimer);
         typingTimer = setTimeout(()=> {
             if(searchTerm.length>0){

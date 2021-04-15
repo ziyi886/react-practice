@@ -27,9 +27,9 @@ export const Callback = () => {
     const parts = hash.split('=');
     const rawToken = parts[1];
     const cookies = new Cookies();
-    cookies.set('token', rawToken, { path: '/', expires: new Date(Date.now()+7200000) });
+    cookies.set('token', rawToken, { path: '/', expires: new Date(Date.now()+7200000) }); //store the token into cookie
     const history = useHistory();
-    setTimeout(() => {
+    setTimeout(() => { //redirect to search page after 3 seconds
         history.push(`/`);
       }, 3000);
     
