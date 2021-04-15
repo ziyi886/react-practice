@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styled from 'styled-components';
 interface PageControlProps{
     page: number;
     totalPage: number;
@@ -7,13 +7,19 @@ interface PageControlProps{
     handleNextPage: () => void;
 }
 
+const Wrapper = styled.button`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
 export const PageControl: React.FC<PageControlProps> = ({page, totalPage, handleGoBack, handleNextPage}) => {
     
     return (
-        <>
+        <Wrapper>
         <button onClick={handleGoBack}>prev</button>
             {`Page ${page}/${totalPage}`}
         <button onClick={handleNextPage}>next</button>
-        </>
+        </Wrapper>
     )
 }

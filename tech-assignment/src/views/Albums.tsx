@@ -29,7 +29,7 @@ const SecondHeader = styled.div`
 `;
 
 const PageControlWrapper = styled.div`
-    width: 15%;
+    width: 50%;
     margin-left: auto;
     margin-right: auto;
 `;
